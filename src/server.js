@@ -21,12 +21,17 @@ app.use('/api/v2', v2Routes);
 app.use('*', notFoundHandler);
 app.use(errorHandler);
 
+let serverToClose;
+
 module.exports = {
   server: app,
   start: (port) => {
     if (!port) {
       throw new Error('Missing Port');
     }
-    app.listen(port, () => console.log(`Listening on ${port}`));
+    serverToClose = app.listen(port, () => console.log(`Listening on ${port}`));
+  },
+  close: () => {
+    serverToClose.close();
   },
 };
